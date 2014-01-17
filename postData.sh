@@ -26,6 +26,7 @@ do
 	    	eval echo "$line" >> ./data/curl.data
 		done < "./data/curl.data.template"
 
+            # api url as of 17012014
 	    echo "curl -vi $protocol://platform-api.newrelic.com/platform/v1/metrics -H \"X-License-Key: $license\" -H \"Content-Type: application/json\" -H \"Accept: application/json\" -X POST -d '@./data/curl.data'" |bash
     
 	else
