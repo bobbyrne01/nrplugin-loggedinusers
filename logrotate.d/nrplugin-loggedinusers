@@ -1,0 +1,8 @@
+/var/log/newrelic/nrplugin-loggedinusers.log {
+    rotate 14
+    daily
+    missingok
+    notifempty
+    copytruncate
+    compress
+}

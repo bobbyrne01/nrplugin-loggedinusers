@@ -1,0 +1,80 @@
+#!/bin/bash
+# chkconfig: 2345 95 20
+# description: New Relic plugin to gather number of logged in users on a system
+# processname: nrplugin-loggedinusers
+#
+# Startup script for nrplugin-loggedinusers
+. /etc/rc.d/init.d/functions
+
+NRPLUGIN_LOGGEDINUSERS_HOME="/etc/newrelic/nrplugin-loggedinusers"
+LOG="/var/log/newrelic/nrplugin-loggedinusers.log"
+LOCK="/var/tmp/nrplugin-loggedinusers"
+RETVAL=0
+
+pid_of_nrplugin-loggedinusers() {
+	pid=$(pgrep -f nrplugin-loggedinusers}
+	echo "$pid"
+}
+
+start() {
+    [ -e "$LOG" ] && cnt=`wc -l "$LOG" | awk '{ print $1 }'` || cnt=1
+
+    echo -n $"Starting nrplugin-loggedinusers: "
+
+    cd "$NRPLUGIN_LOGGEDINUSERS_HOME"
+    cd "$NRPLUGIN_LOGGEDINUSERS_HOME";nohup ./nrplugin-loggedinusers.sh >> "$LOG" 2>&1 &
+
+    pid_of_nrplugin-loggedinusers > /dev/null
+    RETVAL=$?
+    [ $RETVAL = 0 ] && success $"$STRING" || failure $"$STRING"
+    echo
+
+    [ $RETVAL = 0 ] && touch "$LOCK"
+}
+
+stop() {
+    echo -n "Stopping nrplugin-loggedinusers: "
+
+    pid=`pid_of_nrplugin-loggedinusers`
+    [ -n "$pid" ] && kill -9 $pid
+    RETVAL=$?
+
+    [ $RETVAL = 0 ] && rm -f "$LOCK"
+    [ $RETVAL = 0 ] && success $"$STRING" || failure $"$STRING"
+    echo
+}
+
+status() {
+    pid=`pid_of_nrplugin-loggedinusers`
+    if [ -n "$pid" ]; then
+        echo "nrplugin-loggedinusers (pid $pid) is running..."
+        return 0
+    fi
+    if [ -f "$LOCK" ]; then
+        echo $"${base} dead but subsys locked"
+        return 2
+    fi
+    echo "nrplugin-loggedinusers is stopped"
+    return 3
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  status)
+    status
+    ;;
+  restart)
+    stop
+    start
+    ;;
+  *)
+    echo $"Usage: $0 {start|stop|restart|status}"
+    exit 1
+esac
+
+exit $RETVAL

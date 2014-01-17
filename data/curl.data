@@ -1,0 +1,17 @@
+{
+ "agent": {
+    "host" : "localhost",
+    "version" : "0.1"
+  },
+  "components": [
+    {
+      "name": "Number of logged in users",
+      "guid": "bobbyrne01.automation.nr.LoggedInUsers",
+      "duration" : 1800,
+      "metrics" : {
+        "Component/bobbyrne01/automation/nr/noOfUsers[Value]": 1
+      }
+    }
+  ]
+}
+
